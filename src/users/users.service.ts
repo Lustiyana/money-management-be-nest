@@ -44,7 +44,7 @@ export class UsersService {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
     const token = jwt.sign(
       { userId: user._id, email: user.email },
-      'SECRETKEY',
+      process.env.JWT_SECRET || 'SECRETKEY',
       { expiresIn: '1h' },
     );
 

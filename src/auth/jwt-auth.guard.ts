@@ -14,7 +14,7 @@ export class JwtAuthGuard implements CanActivate {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     const token = authHeader.split(' ')[1];
     try {
-      const decoded = jwt.verify(token, 'SECRETKEY');
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'SECRETKEY');
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       ctx.user = decoded;
       return true;
