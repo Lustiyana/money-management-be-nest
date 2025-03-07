@@ -14,6 +14,12 @@ export class User extends Document {
 
   @Prop()
   age: number;
+
+  @Prop({ type: [String], default: [] })
+  categories: string[];
+
+  @Prop({ type: [String], default: [] })
+  accounts: string[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

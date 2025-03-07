@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
@@ -7,6 +11,8 @@ import { User } from './user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import * as jwt from 'jsonwebtoken';
+import { UpdateCategoryDto } from './dto/update-category.dto';
+import { UpdateAccountDto } from './dto/update-account.dto';
 
 @Injectable()
 export class UsersService {
@@ -18,6 +24,7 @@ export class UsersService {
     const createdUser = new this.userModel({
       ...createUserDto,
       password: hashedPassword,
+      categories: [],
     });
     return createdUser.save();
   }
@@ -50,5 +57,43 @@ export class UsersService {
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     return { token };
+  }
+
+  async updateCategory(updateCategoryDto: UpdateCategoryDto): Promise<User> {
+    const { id, category } = updateCategoryDto;
+
+    const user = await this.userModel.findById(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (!Array.isArray(user.categories)) {
+      user.categories = [];
+    }
+
+    if (!user.categories.includes(category)) {
+      user.categories.push(category);
+    }
+
+    return user.save();
+  }
+
+  async updateAccount(updateAccountDto: UpdateAccountDto): Promise<User> {
+    const { id, account } = updateAccountDto;
+
+    const user = await this.userModel.findById(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (!Array.isArray(user.categories)) {
+      user.accounts = [];
+    }
+
+    if (!user.accounts.includes(account)) {
+      user.accounts.push(account);
+    }
+
+    return user.save();
   }
 }

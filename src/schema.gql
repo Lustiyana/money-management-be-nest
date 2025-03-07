@@ -6,7 +6,8 @@ type UserType {
   id: String!
   name: String!
   email: String!
-  age: Float
+  categories: [String!]
+  accounts: [String!]
 }
 
 type Query {
@@ -16,6 +17,8 @@ type Query {
 type Mutation {
   createUser(input: CreateUserDto!): UserType!
   loginUser(input: LoginUserDto!): String!
+  updateCategory(input: UpdateCategoryDto!): UserType!
+  updateAccount(input: UpdateAccountDto!): UserType!
 }
 
 input CreateUserDto {
@@ -28,4 +31,14 @@ input CreateUserDto {
 input LoginUserDto {
   email: String!
   password: String!
+}
+
+input UpdateCategoryDto {
+  id: String!
+  category: String!
+}
+
+input UpdateAccountDto {
+  id: String!
+  account: String!
 }

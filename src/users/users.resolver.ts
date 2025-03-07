@@ -5,6 +5,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { UpdateCategoryDto } from './dto/update-category.dto';
+import { UpdateAccountDto } from './dto/update-account.dto';
 
 @Resolver(() => UserType)
 export class UsersResolver {
@@ -26,5 +28,15 @@ export class UsersResolver {
   async loginUser(@Args('input') input: LoginUserDto) {
     const { token } = await this.usersService.login(input);
     return token;
+  }
+
+  @Mutation(() => UserType)
+  updateCategory(@Args('input') input: UpdateCategoryDto) {
+    return this.usersService.updateCategory(input);
+  }
+
+  @Mutation(() => UserType)
+  updateAccount(@Args('input') input: UpdateAccountDto) {
+    return this.usersService.updateAccount(input);
   }
 }
